@@ -1,17 +1,17 @@
-import { expect } from 'chai';
-import SourcesBuilder from '../../src/Api/Builders/sourcesBuilder';
+import { expect } from 'chai'
+import SourcesBuilder from '../../src/Api/Builders/sourcesBuilder'
 
 describe('SourcesBuilder', () => {
-    let builder;
+  let builder
 
-    beforeEach(() => {
-        builder = new SourcesBuilder();
-    });
+  beforeEach(() => {
+    builder = new SourcesBuilder()
+  })
 
-    describe('setSourceId()', () => {
-        it('should set the source id', () => {
-            builder.setSourceId('120');
-            expect(builder.getUrl()).to.be.eql('source_id=120');
-        });
-    });
-});
+  describe('setSourceId()', () => {
+    it('should set the source id', () => {
+      builder.setSourceId('120')
+      expect(builder.getUrl()).to.be.eql('source_id=120')
+    })
+  })
+})

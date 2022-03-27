@@ -1,9 +1,9 @@
-import Builder from './builder';
+import Builder from './builder'
 
 class SourcesBuilder extends Builder {
-    setSourceId(sourceId) {
-        return this.addAttribute(`source_id=${sourceId}`);
-    }
+  setSourceId(sourceId) {
+    return this.addAttribute(`source_id=${sourceId}`)
+  }
 }
 
-export default SourcesBuilder;
+export default SourcesBuilder

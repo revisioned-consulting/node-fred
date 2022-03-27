@@ -1,6 +1,5 @@
-import Builder from './builder';
+import Builder from './builder'
 
-class TagsBuilder extends Builder {
-}
+class TagsBuilder extends Builder {}
 
-export default TagsBuilder;
+export default TagsBuilder

@@ -1,107 +1,107 @@
-import Builder from './builder';
+import Builder from './builder'
 
 class SeriesBuilder extends Builder {
-    setSeriesId(seriesId) {
-        return this.addAttribute(`series_id=${seriesId}`);
+  setSeriesId(seriesId) {
+    return this.addAttribute(`series_id=${seriesId}`)
+  }
+
+  setObservationStart(params) {
+    const observationStart = params.observation_start
+
+    if (!observationStart) {
+      return this
     }
-
-    setObservationStart(params) {
-        const observationStart = params.observation_start;
-
-        if (!observationStart) {
-            return this;
-        }
-        if (!this.isValidDate(observationStart)) {
-            throw new Error('The format of this date is not valid. Please format the date like this: YYYY-MM-DD');
-        }
-        return this.addAttribute(`observation_start=${observationStart}`);
+    if (!this.isValidDate(observationStart)) {
+      throw new Error('The format of this date is not valid. Please format the date like this: YYYY-MM-DD')
     }
+    return this.addAttribute(`observation_start=${observationStart}`)
+  }
 
-    setObservationEnd(params) {
-        const observationEnd = params.observation_end;
+  setObservationEnd(params) {
+    const observationEnd = params.observation_end
 
-        if (!observationEnd) {
-            return this;
-        }
-        if (!this.isValidDate(observationEnd)) {
-            throw new Error('The format of this date is not valid. Please format the date like this: YYYY-MM-DD');
-        }
-        return this.addAttribute(`observation_end=${observationEnd}`);
+    if (!observationEnd) {
+      return this
     }
-
-    setUnits(params) {
-        const { units } = params;
-
-        if (units === '') {
-            return this;
-        }
-        return this.addAttribute(`units=${units}`);
+    if (!this.isValidDate(observationEnd)) {
+      throw new Error('The format of this date is not valid. Please format the date like this: YYYY-MM-DD')
     }
+    return this.addAttribute(`observation_end=${observationEnd}`)
+  }
 
-    setFrequency(params) {
-        const { frequency } = params;
+  setUnits(params) {
+    const { units } = params
 
-        if (!frequency) {
-            return this;
-        }
-        return this.addAttribute(`frequency=${frequency}`);
+    if (units === '') {
+      return this
     }
+    return this.addAttribute(`units=${units}`)
+  }
 
-    setAggregationMethod(params) {
-        const aggregationMethod = params.aggregation_method;
+  setFrequency(params) {
+    const { frequency } = params
 
-        if (!aggregationMethod) {
-            return this;
-        }
-        return this.addAttribute(`aggregation_method=${aggregationMethod}`);
+    if (!frequency) {
+      return this
     }
+    return this.addAttribute(`frequency=${frequency}`)
+  }
 
-    setOutputType(params) {
-        const outputType = params.output_type;
+  setAggregationMethod(params) {
+    const aggregationMethod = params.aggregation_method
 
-        if (!outputType) {
-            return this;
-        }
-        return this.addAttribute(`output_type=${outputType}`);
+    if (!aggregationMethod) {
+      return this
     }
+    return this.addAttribute(`aggregation_method=${aggregationMethod}`)
+  }
 
-    setVintageDate(params) {
-        const vintageDates = params.vintage_dates;
+  setOutputType(params) {
+    const outputType = params.output_type
 
-        if (!vintageDates) {
-            return this;
-        }
-        return this.addAttribute(`vintage_dates=${vintageDates}`);
+    if (!outputType) {
+      return this
     }
+    return this.addAttribute(`output_type=${outputType}`)
+  }
 
-    setSearchType(params) {
-        const searchType = params.search_type;
+  setVintageDate(params) {
+    const vintageDates = params.vintage_dates
 
-        if (!searchType) {
-            return this;
-        }
-        return this.addAttribute(`search_type=${searchType}`);
+    if (!vintageDates) {
+      return this
     }
+    return this.addAttribute(`vintage_dates=${vintageDates}`)
+  }
 
-    setSearchText(searchText) {
-        if (!searchText) {
-            return this;
-        }
-        return this.addAttribute(`search_text=${searchText}`);
+  setSearchType(params) {
+    const searchType = params.search_type
+
+    if (!searchType) {
+      return this
     }
+    return this.addAttribute(`search_type=${searchType}`)
+  }
 
-    setSeriesSearchText(seriesSearchText) {
-        return this.addAttribute(`series_search_text=${seriesSearchText}`);
+  setSearchText(searchText) {
+    if (!searchText) {
+      return this
     }
+    return this.addAttribute(`search_text=${searchText}`)
+  }
 
-    setTagSearchText(params) {
-        const tagSearchText = params.tag_search_text;
+  setSeriesSearchText(seriesSearchText) {
+    return this.addAttribute(`series_search_text=${seriesSearchText}`)
+  }
 
-        if (!tagSearchText) {
-            return this;
-        }
-        return this.addAttribute(`tag_search_text=${tagSearchText}`);
+  setTagSearchText(params) {
+    const tagSearchText = params.tag_search_text
+
+    if (!tagSearchText) {
+      return this
     }
+    return this.addAttribute(`tag_search_text=${tagSearchText}`)
+  }
 }
 
-export default SeriesBuilder;
+export default SeriesBuilder

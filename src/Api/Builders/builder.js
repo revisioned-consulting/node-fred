@@ -1,157 +1,158 @@
 class Builder {
-    constructor() {
-        this.url = '';
+  constructor() {
+    this.url = ''
+  }
+
+  addAttribute(attribute) {
+    this.url += (this.url === '' ? '' : '&') + attribute
+    return this
+  }
+
+  setAPIKey(apiKey) {
+    return this.addAttribute(`api_key=${apiKey}`)
+  }
+
+  setFileType(fileType) {
+    return this.addAttribute(`file_type=${fileType}`)
+  }
+
+  isValidDate(dateString) {
+    // eslint-disable-line
+    const regEx = /^\d{4}-\d{2}-\d{2}$/
+
+    return dateString.match(regEx) != null
+  }
+
+  setRealTimeStart(params) {
+    const realTimeStart = params.realtime_start
+
+    if (!realTimeStart) {
+      return this
     }
-
-    addAttribute(attribute) {
-        this.url += (this.url === '' ? '' : '&') + attribute;
-        return this;
+    if (!this.isValidDate(realTimeStart)) {
+      throw new Error('The format of this date is not valid. Please format the date like this: YYYY-MM-DD')
     }
+    return this.addAttribute(`realtime_start=${realTimeStart}`)
+  }
 
-    setAPIKey(apiKey) {
-        return this.addAttribute(`api_key=${apiKey}`);
+  setRealTimeEnd(params) {
+    const realTimeEnd = params.realtime_end
+
+    if (!realTimeEnd) {
+      return this
     }
-
-    setFileType(fileType) {
-        return this.addAttribute(`file_type=${fileType}`);
+    if (!this.isValidDate(realTimeEnd)) {
+      throw new Error('The format of this date is not valid. Please format the date like this: YYYY-MM-DD')
     }
+    return this.addAttribute(`realtime_end=${realTimeEnd}`)
+  }
 
-    isValidDate(dateString) { // eslint-disable-line
-        const regEx = /^\d{4}-\d{2}-\d{2}$/;
+  setLimit(params) {
+    const limit = parseInt(params.limit, 10)
 
-        return dateString.match(regEx) != null;
+    if (!limit) {
+      return this
     }
-
-    setRealTimeStart(params) {
-        const realTimeStart = params.realtime_start;
-
-        if (!realTimeStart) {
-            return this;
-        }
-        if (!this.isValidDate(realTimeStart)) {
-            throw new Error('The format of this date is not valid. Please format the date like this: YYYY-MM-DD');
-        }
-        return this.addAttribute(`realtime_start=${realTimeStart}`);
+    if (limit < 0 || limit > 1000) {
+      throw new Error('Limit must be between 0 and 1000')
     }
+    return this.addAttribute(`limit=${limit}`)
+  }
 
-    setRealTimeEnd(params) {
-        const realTimeEnd = params.realtime_end;
+  setOffset(params) {
+    const offset = parseInt(params.offset, 10)
 
-        if (!realTimeEnd) {
-            return this;
-        }
-        if (!this.isValidDate(realTimeEnd)) {
-            throw new Error('The format of this date is not valid. Please format the date like this: YYYY-MM-DD');
-        }
-        return this.addAttribute(`realtime_end=${realTimeEnd}`);
+    if (!offset) {
+      return this
     }
-
-    setLimit(params) {
-        const limit = parseInt(params.limit, 10);
-
-        if (!limit) {
-            return this;
-        }
-        if (limit < 0 || limit > 1000) {
-            throw new Error('Limit must be between 0 and 1000');
-        }
-        return this.addAttribute(`limit=${limit}`);
+    if (offset < 0) {
+      throw new Error('Offset must be greater than 0')
     }
+    return this.addAttribute(`offset=${offset}`)
+  }
 
-    setOffset(params) {
-        const offset = parseInt(params.offset, 10);
+  setOrderBy(params) {
+    const orderBy = params.order_by
 
-        if (!offset) {
-            return this;
-        }
-        if (offset < 0) {
-            throw new Error('Offset must be greater than 0');
-        }
-        return this.addAttribute(`offset=${offset}`);
+    if (!orderBy) {
+      return this
     }
+    return this.addAttribute(`order_by=${orderBy}`)
+  }
 
-    setOrderBy(params) {
-        const orderBy = params.order_by;
+  setSortOrder(params) {
+    let sortOrder = params.sort_order
 
-        if (!orderBy) {
-            return this;
-        }
-        return this.addAttribute(`order_by=${orderBy}`);
+    if (!sortOrder) {
+      return this
     }
-
-    setSortOrder(params) {
-        let sortOrder = params.sort_order;
-
-        if (!sortOrder) {
-            return this;
-        }
-        sortOrder = sortOrder.toLowerCase();
-        if (sortOrder !== 'asc' && sortOrder !== 'desc') {
-            throw new Error('Sort order can only be either asc or desc');
-        }
-        return this.addAttribute(`sort_order=${sortOrder}`);
+    sortOrder = sortOrder.toLowerCase()
+    if (sortOrder !== 'asc' && sortOrder !== 'desc') {
+      throw new Error('Sort order can only be either asc or desc')
     }
+    return this.addAttribute(`sort_order=${sortOrder}`)
+  }
 
-    setFilterVariable(params) {
-        const filterVariable = params.filter_variable;
+  setFilterVariable(params) {
+    const filterVariable = params.filter_variable
 
-        if (!filterVariable) {
-            return this;
-        }
-        return this.addAttribute(`filter_variable=${filterVariable}`);
+    if (!filterVariable) {
+      return this
     }
+    return this.addAttribute(`filter_variable=${filterVariable}`)
+  }
 
-    setFilterValue(params) {
-        const filterValue = params.filter_value;
+  setFilterValue(params) {
+    const filterValue = params.filter_value
 
-        if (!filterValue) {
-            return this;
-        }
-        return this.addAttribute(`filter_value=${filterValue}`);
+    if (!filterValue) {
+      return this
     }
+    return this.addAttribute(`filter_value=${filterValue}`)
+  }
 
-    setTagNames(params) {
-        if (typeof (params) === 'string') {
-            return this.addAttribute(`tag_names=${params}`);
-        }
-        const tagNames = params.tag_names;
-
-        if (!tagNames) {
-            return this;
-        }
-        return this.addAttribute(`tag_names=${tagNames}`);
+  setTagNames(params) {
+    if (typeof params === 'string') {
+      return this.addAttribute(`tag_names=${params}`)
     }
+    const tagNames = params.tag_names
 
-    setExcludeTagNames(params) {
-        const excludeTagNames = params.exclude_tag_names;
-
-        if (!excludeTagNames) {
-            return this;
-        }
-        return this.addAttribute(`exclude_tag_names=${excludeTagNames}`);
+    if (!tagNames) {
+      return this
     }
+    return this.addAttribute(`tag_names=${tagNames}`)
+  }
 
-    setSearchText(params) {
-        const searchText = params.search_text;
+  setExcludeTagNames(params) {
+    const excludeTagNames = params.exclude_tag_names
 
-        if (!searchText) {
-            return this;
-        }
-        return this.addAttribute(`search_text=${searchText}`);
+    if (!excludeTagNames) {
+      return this
     }
+    return this.addAttribute(`exclude_tag_names=${excludeTagNames}`)
+  }
 
-    setTagGroupId(params) {
-        const tagGroupId = params.tag_group_id;
+  setSearchText(params) {
+    const searchText = params.search_text
 
-        if (!tagGroupId) {
-            return this;
-        }
-        return this.addAttribute(`tag_group_id=${tagGroupId}`);
+    if (!searchText) {
+      return this
     }
+    return this.addAttribute(`search_text=${searchText}`)
+  }
 
-    getUrl() {
-        return this.url;
+  setTagGroupId(params) {
+    const tagGroupId = params.tag_group_id
+
+    if (!tagGroupId) {
+      return this
     }
+    return this.addAttribute(`tag_group_id=${tagGroupId}`)
+  }
+
+  getUrl() {
+    return this.url
+  }
 }
 
-export default Builder;
+export default Builder

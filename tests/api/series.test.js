@@ -1,198 +1,267 @@
-import chai, { expect } from 'chai';
-import sinonChai from 'sinon-chai';
-import Series from '../../src/Api/series';
+import chai, { expect } from 'chai'
+import sinonChai from 'sinon-chai'
+import Series from '../../src/Api/series'
 
-chai.use(sinonChai);
+chai.use(sinonChai)
 
 describe('Series', () => {
-    let series;
-    let params;
+  let series
+  let params
 
+  beforeEach(() => {
+    series = new Series(process.env.FRED_API_KEY, 'json')
+  })
+
+  describe('getSeries()', () => {
     beforeEach(() => {
-        series = new Series(process.env.FRED_API_KEY, 'json');
-    });
+      params = {
+        realtime_start: '2000-10-11',
+        realtime_end: '2000-10-15',
+      }
+    })
+    it('should set the set the correct url and call get', async () => {
+      const res = await series.getSeries('GNPCA', params)
 
-    describe('getSeries()', () => {
-        beforeEach(() => {
-            params = {
-                realtime_start: '2000-10-11',
-                realtime_end: '2000-10-15'
-            };
-        });
-        it('should set the set the correct url and call get', async () => {
-            const res = await series.getSeries('GNPCA', params);
+      expect(res).to.have.all.keys('realtime_start', 'realtime_end', 'seriess')
+    })
+  })
 
-            expect(res).to.have.all.keys('realtime_start', 'realtime_end', 'seriess');
-        });
-    });
+  describe('getCategoriesForSeries()', () => {
+    beforeEach(() => {
+      params = {
+        realtime_start: '2000-10-11',
+        realtime_end: '2000-10-15',
+      }
+    })
+    it('should set the set the correct url and call get', async () => {
+      const res = await series.getCategoriesForSeries('GNPCA', params)
 
-    describe('getCategoriesForSeries()', () => {
-        beforeEach(() => {
-            params = {
-                realtime_start: '2000-10-11',
-                realtime_end: '2000-10-15'
-            };
-        });
-        it('should set the set the correct url and call get', async () => {
-            const res = await series.getCategoriesForSeries('GNPCA', params);
+      expect(res).to.have.all.keys('categories')
+    })
+  })
 
-            expect(res).to.have.all.keys('categories');
-        });
-    });
+  describe('getObservationsForSeries()', () => {
+    beforeEach(() => {
+      params = {
+        realtime_start: '2000-10-11',
+        realtime_end: '2000-10-15',
+        limit: 100,
+        offset: 10,
+        sort_order: 'asc',
+        observation_start: '1960-03-10',
+        observation_end: '1965-03-10',
+        frequency: 'a',
+        aggregation_method: 'avg',
+        output_type: '1',
+        vintage_date: 'dates',
+        units: 'lin',
+      }
+    })
+    it('should set the set the correct url and call get', async () => {
+      const res = await series.getObservationsForSeries('GNPCA', params)
 
-    describe('getObservationsForSeries()', () => {
-        beforeEach(() => {
-            params = {
-                realtime_start: '2000-10-11',
-                realtime_end: '2000-10-15',
-                limit: 100,
-                offset: 10,
-                sort_order: 'asc',
-                observation_start: '1960-03-10',
-                observation_end: '1965-03-10',
-                frequency: 'a',
-                aggregation_method: 'avg',
-                output_type: '1',
-                vintage_date: 'dates',
-                units: 'lin'
-            };
-        });
-        it('should set the set the correct url and call get', async () => {
-            const res = await series.getObservationsForSeries('GNPCA', params);
+      expect(res).to.have.all.keys(
+        'realtime_start',
+        'realtime_end',
+        'observation_start',
+        'observation_end',
+        'units',
+        'output_type',
+        'file_type',
+        'order_by',
+        'sort_order',
+        'count',
+        'offset',
+        'limit',
+        'observations'
+      )
+    })
+  })
 
-            expect(res).to.have.all.keys(
-                'realtime_start', 'realtime_end', 'observation_start', 'observation_end', 'units',
-                'output_type', 'file_type', 'order_by', 'sort_order', 'count', 'offset', 'limit', 'observations'
-            );
-        });
-    });
+  describe('getReleaseForSeries()', () => {
+    beforeEach(() => {
+      params = {
+        realtime_start: '2000-10-11',
+        realtime_end: '2000-10-15',
+      }
+    })
+    it('should set the set the correct url and call get', async () => {
+      const res = await series.getReleaseForSeries('GNPCA', params)
 
-    describe('getReleaseForSeries()', () => {
-        beforeEach(() => {
-            params = {
-                realtime_start: '2000-10-11',
-                realtime_end: '2000-10-15'
-            };
-        });
-        it('should set the set the correct url and call get', async () => {
-            const res = await series.getReleaseForSeries('GNPCA', params);
+      expect(res).to.have.all.keys('realtime_start', 'realtime_end', 'releases')
+    })
+  })
 
-            expect(res).to.have.all.keys('realtime_start', 'realtime_end', 'releases');
-        });
-    });
+  describe('getSeriesThatMatchesSearch()', () => {
+    beforeEach(() => {
+      params = {
+        realtime_start: '2000-10-11',
+        realtime_end: '2000-10-15',
+        limit: 100,
+        offset: 10,
+        order_by: 'series_id',
+        sort_order: 'asc',
+        tag_names: 'income;bea',
+        exclude_tag_names: 'discontinued;annual',
+        filter_variable: 'frequency',
+        filter_value: 'filter',
+        search_type: 'full_text',
+      }
+    })
+    it('should set the set the correct url and call get', async () => {
+      const res = await series.getSeriesThatMatchesSearch('monetary+service+index', params)
 
-    describe('getSeriesThatMatchesSearch()', () => {
-        beforeEach(() => {
-            params = {
-                realtime_start: '2000-10-11',
-                realtime_end: '2000-10-15',
-                limit: 100,
-                offset: 10,
-                order_by: 'series_id',
-                sort_order: 'asc',
-                tag_names: 'income;bea',
-                exclude_tag_names: 'discontinued;annual',
-                filter_variable: 'frequency',
-                filter_value: 'filter',
-                search_type: 'full_text'
-            };
-        });
-        it('should set the set the correct url and call get', async () => {
-            const res = await series.getSeriesThatMatchesSearch('monetary+service+index', params);
+      expect(res).to.have.all.keys(
+        'realtime_start',
+        'realtime_end',
+        'filter_variable',
+        'filter_value',
+        'order_by',
+        'sort_order',
+        'count',
+        'offset',
+        'limit',
+        'seriess'
+      )
+    })
+  })
 
-            expect(res).to.have.all.keys('realtime_start', 'realtime_end', 'filter_variable', 'filter_value', 'order_by', 'sort_order', 'count', 'offset', 'limit', 'seriess');
-        });
-    });
+  describe('getTagsForSeriesSearch()', () => {
+    beforeEach(() => {
+      params = {
+        realtime_start: '2000-10-11',
+        realtime_end: '2000-10-15',
+        limit: 100,
+        offset: 10,
+        order_by: 'created',
+        sort_order: 'asc',
+        tag_names: 'income;bea',
+        tag_group_id: 'gen',
+        tag_search_text: 'certaintag',
+      }
+    })
+    it('should set the set the correct url and call get', async () => {
+      const res = await series.getTagsForSeriesSearch('monetary+service+index', params)
 
-    describe('getTagsForSeriesSearch()', () => {
-        beforeEach(() => {
-            params = {
-                realtime_start: '2000-10-11',
-                realtime_end: '2000-10-15',
-                limit: 100,
-                offset: 10,
-                order_by: 'created',
-                sort_order: 'asc',
-                tag_names: 'income;bea',
-                tag_group_id: 'gen',
-                tag_search_text: 'certaintag'
-            };
-        });
-        it('should set the set the correct url and call get', async () => {
-            const res = await series.getTagsForSeriesSearch('monetary+service+index', params);
+      expect(res).to.have.all.keys(
+        'realtime_start',
+        'realtime_end',
+        'order_by',
+        'sort_order',
+        'count',
+        'offset',
+        'limit',
+        'tags'
+      )
+    })
+  })
 
-            expect(res).to.have.all.keys('realtime_start', 'realtime_end', 'order_by', 'sort_order', 'count', 'offset', 'limit', 'tags');
-        });
-    });
+  describe('getRelatedTagsForSeriesSearch()', () => {
+    beforeEach(() => {
+      params = {
+        realtime_start: '2000-10-11',
+        realtime_end: '2000-10-15',
+        limit: 100,
+        offset: 10,
+        order_by: 'created',
+        sort_order: 'desc',
+        tag_names: 'income;bea',
+        tag_group_id: 'gen',
+        exclude_tag_names: 'discontinued;annual',
+        tag_search_text: 'certaintag',
+      }
+    })
+    it('should set the set the correct url and call get', async () => {
+      const res = await series.getRelatedTagsForSeriesSearch('monetary+service+index', params)
 
-    describe('getRelatedTagsForSeriesSearch()', () => {
-        beforeEach(() => {
-            params = {
-                realtime_start: '2000-10-11',
-                realtime_end: '2000-10-15',
-                limit: 100,
-                offset: 10,
-                order_by: 'created',
-                sort_order: 'desc',
-                tag_names: 'income;bea',
-                tag_group_id: 'gen',
-                exclude_tag_names: 'discontinued;annual',
-                tag_search_text: 'certaintag'
-            };
-        });
-        it('should set the set the correct url and call get', async () => {
-            const res = await series.getRelatedTagsForSeriesSearch('monetary+service+index', params);
+      expect(res).to.have.all.keys(
+        'realtime_start',
+        'realtime_end',
+        'order_by',
+        'sort_order',
+        'count',
+        'offset',
+        'limit',
+        'tags'
+      )
+    })
+  })
 
-            expect(res).to.have.all.keys('realtime_start', 'realtime_end', 'order_by', 'sort_order', 'count', 'offset', 'limit', 'tags');
-        });
-    });
+  describe('getTagsForSeries()', () => {
+    beforeEach(() => {
+      params = {
+        realtime_start: '2000-10-11',
+        realtime_end: '2000-10-15',
+        order_by: 'series_count',
+        sort_order: 'asc',
+      }
+    })
+    it('should set the set the correct url and call get', async () => {
+      const res = await series.getTagsForSeries('GNPCA', params)
 
-    describe('getTagsForSeries()', () => {
-        beforeEach(() => {
-            params = {
-                realtime_start: '2000-10-11',
-                realtime_end: '2000-10-15',
-                order_by: 'series_count',
-                sort_order: 'asc'
-            };
-        });
-        it('should set the set the correct url and call get', async () => {
-            const res = await series.getTagsForSeries('GNPCA', params);
+      expect(res).to.have.all.keys(
+        'realtime_start',
+        'realtime_end',
+        'order_by',
+        'sort_order',
+        'count',
+        'offset',
+        'limit',
+        'tags'
+      )
+    })
+  })
 
-            expect(res).to.have.all.keys('realtime_start', 'realtime_end', 'order_by', 'sort_order', 'count', 'offset', 'limit', 'tags');
-        });
-    });
+  describe('getUpdatedSeries()', () => {
+    beforeEach(() => {
+      params = {
+        realtime_start: '2000-10-11',
+        realtime_end: '2000-10-15',
+        order_by: 'series_count',
+        sort_order: 'asc',
+        filter_value: 'regional',
+      }
+    })
+    it('should set the set the correct url and call get', async () => {
+      const res = await series.getUpdatedSeries(params)
 
-    describe('getUpdatedSeries()', () => {
-        beforeEach(() => {
-            params = {
-                realtime_start: '2000-10-11',
-                realtime_end: '2000-10-15',
-                order_by: 'series_count',
-                sort_order: 'asc',
-                filter_value: 'regional'
-            };
-        });
-        it('should set the set the correct url and call get', async () => {
-            const res = await series.getUpdatedSeries(params);
+      expect(res).to.have.all.keys(
+        'realtime_start',
+        'realtime_end',
+        'filter_variable',
+        'filter_value',
+        'order_by',
+        'sort_order',
+        'count',
+        'offset',
+        'limit',
+        'seriess'
+      )
+    })
+  })
 
-            expect(res).to.have.all.keys('realtime_start', 'realtime_end', 'filter_variable', 'filter_value', 'order_by', 'sort_order', 'count', 'offset', 'limit', 'seriess');
-        });
-    });
+  describe('getVintageDatesSeries()', () => {
+    beforeEach(() => {
+      params = {
+        realtime_end: '2000-10-15',
+        limit: 100,
+        offset: 10,
+        sort_order: 'asc',
+      }
+    })
+    it('should set the set the correct url and call get', async () => {
+      const res = await series.getVintageDatesSeries('GNPCA', params)
 
-    describe('getVintageDatesSeries()', () => {
-        beforeEach(() => {
-            params = {
-                realtime_end: '2000-10-15',
-                limit: 100,
-                offset: 10,
-                sort_order: 'asc'
-            };
-        });
-        it('should set the set the correct url and call get', async () => {
-            const res = await series.getVintageDatesSeries('GNPCA', params);
-
-            expect(res).to.have.all.keys('realtime_start', 'realtime_end', 'order_by', 'sort_order', 'count', 'offset', 'limit', 'vintage_dates');
-        });
-    });
-});
+      expect(res).to.have.all.keys(
+        'realtime_start',
+        'realtime_end',
+        'order_by',
+        'sort_order',
+        'count',
+        'offset',
+        'limit',
+        'vintage_dates'
+      )
+    })
+  })
+})

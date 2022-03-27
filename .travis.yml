@@ -1,15 +1,15 @@
 language: node_js
 node_js:
-- 10.16.3
+  - 10.16.3
 sudo: false
 install:
-- npm install
+  - npm install
 script:
-- npm run cover:coveralls
+  - npm run cover:coveralls
 after_success:
-- test -e ./coverage/lcov.info && cat ./coverage/lcov.info | coveralls
+  - test -e ./coverage/lcov.info && cat ./coverage/lcov.info | coveralls
 before_deploy:
-- npm run build
+  - npm run build
 deploy:
   provider: npm
   email: sampastoriza@yahoo.com
